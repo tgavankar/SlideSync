@@ -8,28 +8,30 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
         padding-bottom: 40px;
       }
     </style>
-    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="/static/js/html5shiv.js"></script>
+      <script src="{{ STATIC_URL }}/js/html5shiv.js"></script>
     <![endif]-->
 
     <!-- Fav and touch icons -->
     <!--
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/static/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/ico/apple-touch-icon-114-precomposed.png">
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/ico/apple-touch-icon-72-precomposed.png">
-                    <link rel="apple-touch-icon-precomposed" href="/static/ico/apple-touch-icon-57-precomposed.png">
-                                   <link rel="shortcut icon" href="/static/ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ STATIC_URL }}/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ STATIC_URL }}/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="{{ STATIC_URL }}/ico/favicon.png">
     -->
+    {% block head %}
+    {% endblock %}
   </head>
 
   <body>
@@ -92,8 +94,10 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}/js/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}/js/bootstrap.min.js"></script>
+    {% block foot %}
+    {% endblock %}
 
   </body>
 </html>

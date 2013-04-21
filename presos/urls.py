@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     url(r'^$', lambda x: HttpResponseRedirect('gallery/')),
     url(r'^gallery/', views.gallery, name='gallery'),
     url(r'^(?P<preso_id>\d+)/$', views.edit, name='edit'),
+    url(r'^create/', views.create, name='create'),
 )

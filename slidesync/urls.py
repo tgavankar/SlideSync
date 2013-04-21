@@ -17,5 +17,6 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^accounts/', include('registration.auth_urls')),
     url(r'^accounts/', include('accounts.urls')),
-    url(r'^presos/', include('presos.urls'), name="presos"),
+    url(r'^presos/', include('presos.urls', namespace="presos")),
+    url(r'^ajax-upload$', include('ajax_upload.urls')),
 )

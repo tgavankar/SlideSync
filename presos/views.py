@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseForbidden
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
+from forms import PresentationForm
 from models import Presentation
+
 
 @login_required
 def gallery(request):
@@ -18,4 +21,13 @@ def edit(request, preso_id):
 
 @login_required
 def create(request):
-    pass
+    if request.method == 'POST':
+        preso = Presentation(creator=request.user)
+        form = PresentationForm(request.POST, request.FILES, instance=preso)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('presos:gallery'))
+    else:
+        form = PresentationForm()
+    return render(request, 'presos/create.html', {'form': form})
+
