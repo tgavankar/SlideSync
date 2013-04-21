@@ -1,0 +1,6 @@
+Thanks for registering for an account at {{ site.name }}!
+
+Your activation key is:
+http://{{ site.domain }}{% url 'registration_activate' activation_key %}
+
+It will expire after {{ expiration_days }} days.

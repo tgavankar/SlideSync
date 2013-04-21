@@ -1,0 +1,13 @@
+{% extends "presos/base.html" %}
+
+{% block content %}
+{% if presos %}
+<ul>
+{% for p in presos %}
+<li><a href="{% url 'presos:edit' p.id %}">{{ p.title }} - {{ p.modified }}</a></li>
+{% endfor %}
+</ul>
+{% else %}
+No presentations found!
+{% endif %}
+{% endblock %}
