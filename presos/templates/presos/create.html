@@ -1,25 +1,20 @@
 {% extends "presos/base.html" %}
 
-{% block head %}
-<link href="{{ STATIC_URL }}ajax_upload/css/ajax-upload-widget.css" rel="stylesheet" type="text/css"/>
+{% load progress_bar %}
 
+{% block head %}
+{% progress_bar_media %}
 {% endblock %}
 
 {% block content %}
 <form action="{% url 'presos:create' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+    {% progress_bar %}
     <input type="submit" value="Create">
 </form>
 {% endblock %}
 
 {% block foot %}
-<script src="{{ STATIC_URL }}ajax_upload/js/jquery.iframe-transport.js"></script>
-<script src="{{ STATIC_URL }}ajax_upload/js/ajax-upload-widget.js"></script>
 
-<script>
-    $(function() {
-        AjaxUploadWidget.autoDiscover();
-    });
-</script>
         {% endblock %}

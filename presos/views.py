@@ -13,6 +13,8 @@ def gallery(request):
     presos = Presentation.objects.filter(creator=request.user)
     return render(request, 'presos/gallery.html', {'presos': presos})
 
+list = gallery
+
 @login_required
 def edit(request, preso_id):
     preso = get_object_or_404(Presentation, pk=preso_id)
@@ -31,3 +33,13 @@ def create(request):
         form = PresentationForm()
     return render(request, 'presos/create.html', {'form': form})
 
+@login_required
+def present(request, preso_id):
+    preso = get_object_or_404(Presentation, pk=preso_id)
+    if preso.creator != request.user:
+        return PermissionDenied()
+    return render(request, 'presos/present.html', {'preso': preso})
+
+def view(request, preso_id):
+    preso = get_object_or_404(Presentation, pk=preso_id)
+    return render(request, 'presos/view.html', {'preso': preso})

@@ -1,0 +1,77 @@
+{% extends "presos/base.html" %}
+
+
+{% block head %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/pdfjs/pdf.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/pdfjs/compatibility.js"></script>
+
+  <script type="text/javascript">
+    PDFJS.workerSrc = '{{ STATIC_URL }}js/pdfjs/pdf.js';
+
+    PDFJS.getDocument('{{ STATIC_URL }}{{ preso.pdf }}').then(function(pdf) {
+      // Using promise to fetch the page
+      pdf.getPage(1).then(function(page) {
+        var scale = 1;
+        var viewport = page.getViewport(scale);
+
+        //
+        // Prepare canvas using PDF page dimensions
+        //
+        var canvas = document.getElementById('the-canvas');
+        var context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        //
+        // Render PDF page into canvas context
+        //
+        var renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
+        page.render(renderContext);
+      });
+    });
+
+    function goFullscreen(id) {
+        var element = document.getElementById(id);
+        if(element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if(element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
+        }
+    }
+
+
+  </script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+    <div class="span12">
+<canvas id="the-canvas" style="border:1px solid black;" />
+</div>
+
+
+    <div class="btn-group">
+        <a class="btn" href="#"><i class="icon-chevron-left"></i></a>
+        <a class="btn" href="#"><i class="icon-chevron-right"></i></a>
+    </div>
+
+
+</div>
+<div class="row">
+    <div class="span6">
+<a href="#">TESTEST</a></div>
+<div class="span6"><button onclick="goFullscreen('the-canvas'); return false;">Fullscreen</button></div>
+</div>
+{% endblock %}
+
+{% block foot %}
+<script>    $(document).ready(function() {
+        $(window).bind('keydown', function(e) {
+            alert(e.keyCode);
+        });
+    });</script>
+        {% endblock %}

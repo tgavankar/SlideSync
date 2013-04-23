@@ -1,7 +1,5 @@
 from django import forms
 
-from ajax_upload import widgets
-
 from models import Presentation
 
 

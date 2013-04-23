@@ -59,7 +59,7 @@ MEDIA_ROOT = path('media')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -67,7 +67,7 @@ MEDIA_URL = 'media/'
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = path('../static')
 
-# URL prefix for static files.
+#  prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
 
@@ -77,6 +77,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     path('static'),
+    path('media'),
 )
 
 # List of finder classes that know how to find static files in
@@ -133,6 +134,7 @@ INSTALLED_APPS = (
     'registration',
     'accounts',
     'presos',
+    'progressbarupload',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -175,4 +177,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.static',
+    'django.core.context_processors.media',
+)
+
+FILE_UPLOAD_HANDLERS = (
+    "progressbarupload.uploadhandler.ProgressBarUploadHandler",
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
 )
