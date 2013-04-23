@@ -88,6 +88,8 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '^_y^a$k+#7by@a#yno#y%x#^r*u)utxbm00dn^itj9e^18d@&v'
 
@@ -134,7 +136,9 @@ INSTALLED_APPS = (
     'registration',
     'accounts',
     'presos',
+
     'progressbarupload',
+    'pipeline',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -185,3 +189,38 @@ FILE_UPLOAD_HANDLERS = (
     "django.core.files.uploadhandler.MemoryFileUploadHandler",
     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
 )
+
+# django-pipeline config
+PIPELINE_CSS = {
+    'bootstrap': {
+        'source_filenames': (
+            'css/bootstrap.min.css',
+            'css/bootstrap-responsive.min.css',
+        ),
+        'output_filename': 'css/bootstrap.css',
+    },
+}
+
+PIPELINE_JS = {
+    'jquery': {
+        'source_filenames': (
+            'js/jquery.min.js',
+        ),
+        'output_filename': 'js/jquery.js',
+    },
+    'bootstrap': {
+        'source_filenames': (
+            'js/bootstrap.min.js',
+        ),
+        'output_filename': 'js/bootstrap.js',
+    },
+    'pdfjs': {
+        'source_filenames': (
+            'js/pdfjs/pdf.js',
+            'js/pdfjs/compatibility.js',
+        ),
+        'output_filename': 'js/pdf.js'
+    }
+}
+
+PIPELINE_CSS_COMPRESSOR = PIPELINE_JS_COMPRESSOR = None
