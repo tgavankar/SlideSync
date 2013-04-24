@@ -18,3 +18,8 @@
 #canvastoolbar:hover {
     opacity: 1;
 }
+
+#fullscreen_button {
+    position: absolute;
+    right: 5px;
+}
