@@ -77,7 +77,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     path('static'),
-    path('media'),
+    #path('media'),
 )
 
 # List of finder classes that know how to find static files in
@@ -199,6 +199,18 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'css/bootstrap.css',
     },
+    'bootstrap_responsive': {
+        'source_filenames': (
+            'css/bootstrap-responsive.min.css',
+        ),
+        'output_filename': 'css/bootstrap-responsive.css',
+    },
+    'presentation_scaffold': {
+        'source_filenames': (
+            'css/presentation-scaffold.css',
+        ),
+        'output_filename': 'css/presentation-scaffold.css',
+    }
 }
 
 PIPELINE_JS = {
@@ -220,7 +232,13 @@ PIPELINE_JS = {
             'js/pdfjs/compatibility.js',
         ),
         'output_filename': 'js/pdf.js'
-    }
+    },
+    'pdfjsrunner': {
+        'source_filenames': (
+            'js/pdfjsrunner.js',
+        ),
+        'output_filename': 'js/pdfjsrunner.js'
+    },
 }
 
 PIPELINE_CSS_COMPRESSOR = PIPELINE_JS_COMPRESSOR = None
