@@ -1,42 +1,71 @@
 {% extends "presos/base.html" %}
+{% load compressed %}
 
 
 {% block head %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/pdfjs/pdf.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/pdfjs/compatibility.js"></script>
 
-  <script type="text/javascript">
-    PDFJS.workerSrc = '{{ STATIC_URL }}js/pdfjs/pdf.js';
+{% compressed_css 'presentation_scaffold' %}
 
-    PDFJS.getDocument('{{ STATIC_URL }}{{ preso.pdf }}').then(function(pdf) {
-      // Using promise to fetch the page
-      pdf.getPage(1).then(function(page) {
-        var scale = 1;
-        var viewport = page.getViewport(scale);
+{% compressed_js 'pdfjs' %}
+{% compressed_js 'pdfjsrunner' %}
+{% compressed_js 'fullscreen' %}
 
-        //
-        // Prepare canvas using PDF page dimensions
-        //
-        var canvas = document.getElementById('the-canvas');
-        var context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+<script type="text/javascript">
+    $(document).ready(function() {
+        var runner = new PdfJsRunner();
+        runner.init({
+            'workerSrc': '{{ STATIC_URL }}js/pdfjs/pdf.js',
+            'file': '{{ MEDIA_URL }}{{ preso.pdf }}',
+            'canvasId': 'the-canvas',
+            'canvasWrapperLoc': '#canvaswrap',
+        });
 
-        //
-        // Render PDF page into canvas context
-        //
-        var renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-        page.render(renderContext);
-      });
+        $('#back_button').click(function() {
+            runner.back();
+            return false;
+        });
+        $('#forward_button').click(function() {
+            runner.forward();
+            return false;
+        });
+        $('#fullscreen_button').click(function() {
+            goFullscreen('canvaswrap'); 
+            return false;
+        })
     });
-  </script>
+</script>
+
 {% endblock %}
 
 {% block content %}
-<canvas id="the-canvas" style="border:1px solid black;"/>
+<div class="container">
+<div class="row">
+    <div class="span12 text-center" id="canvaswrap">
+        <div id="canvasshrinkwrap">
+            <canvas id="the-canvas" style="border:1px solid black;"></canvas>
+            <div id="canvastoolbar">    
+                <div class="btn-group">
+                    <a class="btn btn-inverse" href="" title="Previous Slide" id="back_button">
+                        <i class="icon-chevron-left icon-white"></i>
+                    </a>
+                    <a class="btn btn-inverse" href="" title="Next Slide" id="forward_button">
+                        <i class="icon-chevron-right icon-white"></i>
+                    </a>
+                </div>
+
+                <a class="btn btn-inverse" href="" title="Fullscreen" id="fullscreen_button">
+                    <i class="icon-fullscreen icon-white"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
 {% endblock %}
 
 {% block foot %}
