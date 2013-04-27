@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('accounts.urls')),
     url(r'^presos/', include('presos.urls', namespace="presos")),
     url(r'', include('progressbarupload.urls')),
+    url(r'^socket\.io', 'slidesync.views.socketio', name='socketio'),
 )

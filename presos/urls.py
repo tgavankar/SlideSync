@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 
 from presos import views
 
+
 urlpatterns = patterns('',
     url(r'^$', lambda x: HttpResponseRedirect('gallery/')),
     url(r'^gallery/', views.gallery, name='gallery'),
