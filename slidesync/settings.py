@@ -239,6 +239,12 @@ PIPELINE_JS = {
         ),
         'output_filename': 'js/pdfjsrunner.js'
     },
+    'fullscreen': {
+        'source_filenames': (
+            'js/fullscreen.js',
+        ),
+        'output_filename': 'js/fullscreen.js'
+    }
 }
 
 PIPELINE_CSS_COMPRESSOR = PIPELINE_JS_COMPRESSOR = None

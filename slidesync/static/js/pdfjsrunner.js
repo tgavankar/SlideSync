@@ -2,9 +2,9 @@ function PdfJsRunner() {
     this.init = function(args) {
         this.url = args.file;
         this.pdfDoc = null;
-        this.idx = 1;
+        this.idx = this.getHashCursor() || 1;
         this.scale = 1;
-        this.canvas = document.getElementById('the-canvas');
+        this.canvas = document.getElementById(args.canvasId);
         this.ctx = this.canvas.getContext('2d');
         this.canvasWrapperLoc = args.canvasWrapperLoc;
 
@@ -15,8 +15,10 @@ function PdfJsRunner() {
             this.renderPage(this.idx);
         }.bind(this));
 
+        this.setupTouchEvents();
         window.onresize = this.onResize.bind(this);
         window.onhashchange= this.onHashChange.bind(this);
+        window.onkeydown = this.onKeyDown.bind(this);
     }
 
     this.renderPage = function(num) {
@@ -48,15 +50,21 @@ function PdfJsRunner() {
     }
 
     this.back = function() {
+        if (this.idx <= 1) {
+            return;
+        }
         this.setPage(this.idx-1);
     }
 
     this.forward = function() {
+        if (this.idx >= this.pdfDoc.numPages) {
+            return;
+        }
         this.setPage(this.idx+1);
     }
 
     this.updateHash = function(str) {
-        if(window.history.replaceState) {
+        if (window.history.replaceState) {
             window.history.replaceState({}, "", "#" + str);
             $(window).trigger('hashchange');
         }
@@ -68,51 +76,75 @@ function PdfJsRunner() {
     this.onHashChange = function() {
         var cursor = window.location.hash.split("#")[1];
         var newPage = 1;
-        if(cursor) {
+        if (cursor) {
             newPage = parseInt(cursor);
         }
-        if(newPage >= 1 && newPage <= this.pdfDoc.numPages) {
+        if (newPage >= 1 && newPage <= this.pdfDoc.numPages) {
             this.idx = newPage;
             this.renderPage(this.idx);
         }
+    }
+
+    this.getHashCursor = function() {
+        return window.location.hash.split("#")[1];
     }
 
     this.onResize = function(aEvent) {
         this.renderPage(this.idx);
     }
 
-};
+    this.setupTouchEvents = function() {
+        var orgX, newX;
+        var tracking = false;
 
+        var db = this.canvas;
+        db.addEventListener("touchstart", start.bind(this), false);
+        db.addEventListener("touchmove", move.bind(this), false);
 
-
-
-  /*************/
-
-    
-
-    function goFullscreen(id) {
-        // fire event to resize PDF canvas
-        var element = document.getElementById(id);
-
-
-        if(document.fullScreen) {
-            document.cancelFullScreen();
-            return false;
-        } else if(document.mozFullScreen) {
-            document.mozCancelFullScreen();
-            return false;
-        } else if(document.webkitIsFullScreen) {
-            document.webkitCancelFullScreen();
-            return false;
+        function start(aEvent) {
+            aEvent.preventDefault();
+            tracking = true;
+            orgX = aEvent.changedTouches[0].pageX;
         }
 
-
-        if(element.RequestFullScreen) {
-            element.RequestFullScreen();
-        } else if(element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-        } else if(element.webkitRequestFullScreen) {
-            element.webkitRequestFullScreen();
+        function move(aEvent) {
+            if (!tracking) return;
+            newX = aEvent.changedTouches[0].pageX;
+            if (orgX - newX > 100) {
+                tracking = false;
+                this.forward();
+            } else {
+                if (orgX - newX < -100) {
+                    tracking = false;
+                    this.back();
+                }
+            }
         }
     }
 
+    // Allow for keyboard events for navigation.
+    this.onKeyDown = function(aEvent) {
+        // Don't intercept keyboard shortcuts
+        if (aEvent.altKey
+            || aEvent.ctrlKey
+            || aEvent.metaKey
+            || aEvent.shiftKey) {
+            return;
+        }
+
+        if (aEvent.keyCode == 37 // left arrow
+            || aEvent.keyCode == 38 // up arrow
+            || aEvent.keyCode == 33 // page up
+        ) {
+            aEvent.preventDefault();
+            this.back();
+        }
+        if (aEvent.keyCode == 39 // right arrow
+            || aEvent.keyCode == 40 // down arrow
+            || aEvent.keyCode == 34 // page down
+        ) {
+            aEvent.preventDefault();
+            this.forward();
+        }
+    }
+};
