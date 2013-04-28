@@ -74,10 +74,10 @@ function PdfJsRunner() {
     }
 
     this.onHashChange = function() {
-        var cursor = window.location.hash.split("#")[1];
+        var cursor = this.getHashCursor();
         var newPage = 1;
         if (cursor) {
-            newPage = parseInt(cursor);
+            newPage = cursor;
         }
         if (newPage >= 1 && newPage <= this.pdfDoc.numPages) {
             this.idx = newPage;
@@ -86,7 +86,7 @@ function PdfJsRunner() {
     }
 
     this.getHashCursor = function() {
-        return window.location.hash.split("#")[1];
+        return parseInt(window.location.hash.split("#")[1]);
     }
 
     this.onResize = function(aEvent) {
@@ -147,4 +147,23 @@ function PdfJsRunner() {
             this.forward();
         }
     }
+
+    this.bindToSocket = function(socket) {
+        this.socket = socket;
+
+        this.socket.on('receive', function(data) {
+            this.setPage(data);
+        }.bind(this));
+    }
 };
+
+function PdfJsPresenter() { 
+    this.setPage = function(newPage) {
+        if(this.socket) {
+            this.socket.emit('send', newPage);
+            console.log('sent ' + newPage);
+        }
+        PdfJsPresenter.prototype.setPage(newPage);
+    }
+}
+PdfJsPresenter.prototype = new PdfJsRunner();

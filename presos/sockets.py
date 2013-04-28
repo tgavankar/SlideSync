@@ -33,10 +33,12 @@ class RoomsMixin(object):
 
 class PresentNamespace(BaseNamespace, RoomsMixin):
     def on_view(self, room):
+        print 'joining room %s' % room
         self.room = room
         self.join(room)
         return True
 
     def on_send(self, msg):
+        print 'emitting %s to %s' % (msg, self.room)
         self.emit_to_room(self.room, 'receive', msg)
         return True

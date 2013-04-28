@@ -9,6 +9,7 @@
 {% compressed_js 'pdfjs' %}
 {% compressed_js 'pdfjsrunner' %}
 {% compressed_js 'fullscreen' %}
+{% compressed_js 'socketio' %}
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -31,7 +32,14 @@
         $('#fullscreen_button').click(function() {
             goFullscreen('canvaswrap'); 
             return false;
-        })
+        });
+
+        var socket = io.connect('/present');
+        socket.on('connect', function () {
+            socket.emit('view', 'preso' + {{ preso.id }});
+            console.log('connected');
+            runner.bindToSocket(socket);
+        });
     });
 </script>
 

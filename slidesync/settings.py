@@ -246,6 +246,12 @@ PIPELINE_JS = {
             'js/fullscreen.js',
         ),
         'output_filename': 'js/fullscreen.js'
+    },
+    'socketio': {
+        'source_filenames': (
+            'js/socket.io.min.js',
+        ),
+        'output_filename': 'js/socket.io.min.js'
     }
 }
 
